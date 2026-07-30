@@ -32,18 +32,23 @@ The current stable releases of Chromium, Firefox, and Safari are supported.
 - Selecting a specific speaker is not supported by every browser; channel test tones still use the active system output.
 - Another application using a device exclusively may prevent that device from starting.
 
-## Run locally
+## Clone and run locally
 
 Requirements:
 
-- Node.js 24.x
+- Git
+- Node.js 22.13.x or Node.js 24.x (recommended)
 - Corepack
 
 ```bash
+git clone https://github.com/mjibulu/camera-microphone-speaker-tester.git
+cd camera-microphone-speaker-tester
 corepack enable
 pnpm install --frozen-lockfile
 pnpm run dev
 ```
+
+The development server prints the local URL to open in your browser.
 
 ## Verify
 

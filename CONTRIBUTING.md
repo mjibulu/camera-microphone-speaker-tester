@@ -4,7 +4,7 @@ Thank you for improving Camera, Microphone & Speaker Tester.
 
 ## Development setup
 
-Use Node.js 24.x and Corepack:
+Use Node.js 22.13.x or Node.js 24.x (recommended) with Corepack:
 
 ```bash
 corepack enable
