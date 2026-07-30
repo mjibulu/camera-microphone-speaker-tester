@@ -34,5 +34,4 @@ package metadata and upstream repositories. When a dependency changes, update
 this file in the same pull request and review the resulting lockfile.
 
 `public/tool-preview.webp` is original project artwork distributed with this
-repository under the repository's MIT Licence. The eBURP name and logo are not
-included in that artwork and are not licensed for reuse.
+repository under the repository's MIT Licence.

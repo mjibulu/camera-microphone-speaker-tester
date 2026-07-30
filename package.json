@@ -5,6 +5,10 @@
   "type": "module",
   "private": false,
   "license": "MIT",
+  "author": {
+    "name": "M. Jibulu",
+    "url": "https://eburp.com/"
+  },
   "packageManager": "pnpm@11.9.0",
   "engines": {
     "node": "24.x"

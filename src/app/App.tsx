@@ -61,8 +61,11 @@ export function App() {
       </main>
 
       <footer className="site-footer">
-        <span>MIT licensed.</span>
-        <a href="https://eburp.com/">Originally developed for eBURP</a>
+        <span>Open-source software under the MIT Licence.</span>
+        <span>
+          Created by M. Jibulu for{" "}
+          <a href="https://eburp.com/">eBURP</a>.
+        </span>
       </footer>
     </div>
   );

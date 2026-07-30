@@ -204,13 +204,6 @@ h1 {
   font-weight: 650;
 }
 
-.template-notice {
-  padding: 18px;
-  color: var(--text-muted);
-  background: var(--surface-subtle);
-  border-radius: 12px;
-}
-
 .fatal-error {
   width: min(620px, calc(100% - 32px));
   margin: clamp(48px, 12vh, 120px) auto;

@@ -2,9 +2,6 @@
 
 Test selected cameras, microphones, and speakers independently with live previews, input levels, sample playback, and stereo tones.
 
-This is a complete standalone browser application. It does not require eBURP,
-an account, a server-side API, or a private runtime.
-
 ## Features
 
 - Independent camera and microphone permission requests
@@ -20,10 +17,10 @@ an account, a server-side API, or a private runtime.
 ## Browser support and limitations
 
 The current stable releases of Chromium, Firefox, and Safari are supported.
-Some browser capabilities vary by platform. Camera and microphone access
-requires HTTPS or localhost, clipboard access may require a user gesture, and
-fullscreen or output-device selection may not be available in every browser.
-The tool remains usable where a non-essential capability is unavailable.
+
+- Camera and microphone tests require HTTPS or localhost and explicit browser permission.
+- Selecting a specific speaker is not supported by every browser; channel test tones still use the active system output.
+- Another application using a device exclusively may prevent that device from starting.
 
 ## Run locally
 
@@ -62,27 +59,26 @@ Upload the contents of `dist/` to a static host. The application supports both
 root and subdirectory hosting and needs no environment variables.
 
 The same output can be deployed with GitHub Pages, Netlify, Cloudflare Pages,
-Vercel static hosting, or an ordinary file upload. No provider-specific
-runtime, account integration, or server-side function is required by the
-application.
+Vercel static hosting, or an ordinary file upload.
 
 ## Data and network behaviour
 
-The upstream application ships without analytics or telemetry. Tool processing
-occurs in the browser, and the primary browser tests fail unexpected external
-requests. See [PRIVACY.md](./PRIVACY.md) for the repository-specific storage
-and browser API inventory.
+The application ships without analytics or telemetry. Tool processing occurs
+in the browser, and the primary browser tests fail unexpected external
+requests. See [PRIVACY.md](./PRIVACY.md) for the storage and browser API
+inventory.
 
 ## Contributing
 
 Issues and pull requests are welcome. Read
 [CONTRIBUTING.md](./CONTRIBUTING.md) before submitting a change.
 
+## Credits
+
+Created by M. Jibulu for [eBURP](https://eburp.com/).
+
 ## Licence
 
 Original code is available under the [MIT Licence](./LICENSE). Dependencies and
 assets retain their own licences; see
 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
-
-Originally developed for [eBURP](https://eburp.com/). The eBURP name and logo
-are not licensed under the MIT Licence.

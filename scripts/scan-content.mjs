@@ -25,6 +25,16 @@ const rules = [
   ["protected runtime endpoint", /runtime-session\.php|[/]runtime\.php/iu],
   ["eBURP analytics", /@[/]lib[/]analytics|trackEvent\s*\(/u],
   ["private hosting path", /server[/\\]private|domains[/\\]eburp\.com[/\\]private/iu],
+  ["internal standalone positioning", /\bstandalone\b/iu],
+  [
+    "private-project dependency wording",
+    /\b(?:does not require eBURP|private runtime|private eBURP project)\b/iu,
+  ],
+  [
+    "provisional public copy",
+    /\b(?:coming soon|not implemented|work in progress|placeholder implementation|sample tool|repository phase|staging repository|demo only)\b/iu,
+  ],
+  ["unresolved template token", /__[A-Z][A-Z0-9_]*__/u],
   ["PHP source", /<\?php/iu],
   ["runtime fetch", /\bfetch\s*\(/u],
   ["XMLHttpRequest", /\bXMLHttpRequest\b/u],
@@ -76,5 +86,5 @@ if (findings.length > 0) {
   console.error(findings.join("\n"));
   process.exitCode = 1;
 } else {
-  console.log(`Scanned ${files.length} standalone application files.`);
+  console.log(`Scanned ${files.length} application files.`);
 }

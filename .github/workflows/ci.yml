@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Scan standalone content
+      - name: Scan repository content
         run: pnpm run scan
 
       - name: Run fast checks and production build

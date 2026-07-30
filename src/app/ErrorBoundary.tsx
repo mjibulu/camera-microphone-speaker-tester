@@ -20,7 +20,7 @@ export class ErrorBoundary extends Component<
 
   componentDidCatch(error: Error, details: ErrorInfo) {
     if (import.meta.env.DEV) {
-      console.error("Standalone tool render failed.", error, details);
+      console.error("Tool render failed.", error, details);
     }
   }
 
