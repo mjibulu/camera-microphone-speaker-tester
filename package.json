@@ -1,7 +1,7 @@
 {
   "name": "camera-microphone-speaker-tester",
   "version": "0.1.0",
-  "description": "Test selected cameras, microphones, and speakers independently with live previews, input levels, sample playback, and stereo tones.",
+  "description": "Test selected cameras, microphones, and speakers with live previews, input levels, sample playback, and stereo tones.",
   "type": "module",
   "private": false,
   "license": "MIT",

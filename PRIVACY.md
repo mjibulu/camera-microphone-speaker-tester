@@ -6,7 +6,6 @@ This application:
 
 - Does not include analytics, advertising, or telemetry.
 - Does not upload tool input or output.
-- Does not require an account.
 - Tests primary workflows for unexpected external requests.
 
 ## Browser storage

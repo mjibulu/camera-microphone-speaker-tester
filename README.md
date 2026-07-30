@@ -1,18 +1,28 @@
 # Camera, Microphone & Speaker Tester
 
-Test selected cameras, microphones, and speakers independently with live previews, input levels, sample playback, and stereo tones.
+Test selected cameras, microphones, and speakers with live previews, input levels, sample playback, and stereo tones.
 
 ## Features
 
-- Independent camera and microphone permission requests
-- Selected camera preview and microphone input meter
-- Automatic microphone sample recording and playback
-- Left, right, and stereo speaker test tones
-- Immediate media-track and audio-resource cleanup
+- Separate camera and microphone start controls, so only the hardware being tested is activated
+- Live preview for the selected camera with switching between available video devices
+- Real-time microphone level meter for checking input sensitivity and activity
+- Automatic microphone sample recording with playback, stop, and discard controls
+- Left-channel, right-channel, and stereo speaker test tones
+- Output-device selection where the browser supports speaker routing
+- Persistent on-screen hardware status plus one-click cleanup of every active media track and audio resource
 
 ## Screenshot
 
 ![Camera, Microphone & Speaker Tester interface](./public/tool-preview.webp)
+
+## How to use
+
+1. Open the Camera, Microphone, or Speakers panel for the hardware you want to check.
+2. Start the camera or microphone and approve only the permission requested by the browser.
+3. Select a device, then watch the camera preview or microphone level and replay the automatically recorded sample.
+4. Choose an output device when available and play the left, stereo, and right test tones.
+5. Stop each test individually or use Stop all hardware to release every active device.
 
 ## Browser support and limitations
 

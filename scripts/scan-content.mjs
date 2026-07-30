@@ -26,6 +26,7 @@ const rules = [
   ["eBURP analytics", /@[/]lib[/]analytics|trackEvent\s*\(/u],
   ["private hosting path", /server[/\\]private|domains[/\\]eburp\.com[/\\]private/iu],
   ["internal standalone positioning", /\bstandalone\b/iu],
+  ["unnecessary independence positioning", /\bindependent(?:ly)?\b/iu],
   [
     "private-project dependency wording",
     /\b(?:does not require eBURP|private runtime|private eBURP project)\b/iu,

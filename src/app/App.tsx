@@ -41,7 +41,7 @@ export function App() {
         <section className="tool-introduction" aria-labelledby="tool-title">
           <p className="eyebrow">Browser-local utility</p>
           <h1 id="tool-title">Camera, Microphone & Speaker Tester</h1>
-          <p>Test selected cameras, microphones, and speakers independently with live previews, input levels, sample playback, and stereo tones.</p>
+          <p>Test selected cameras, microphones, and speakers with live previews, input levels, sample playback, and stereo tones.</p>
         </section>
 
         <section className="tool-workspace" aria-label="Tool workspace">
@@ -52,9 +52,11 @@ export function App() {
           <summary>How to use this tool</summary>
           <div className="information-content">
             <ol>
-            <li>{"Start only the device you want to test and approve its browser permission."}</li>
-            <li>{"Watch the camera preview or microphone meter and replay the captured microphone sample."}</li>
-            <li>{"Run the speaker channels as needed, then stop testing to release every active device."}</li>
+            <li>{"Open the Camera, Microphone, or Speakers panel for the hardware you want to check."}</li>
+            <li>{"Start the camera or microphone and approve only the permission requested by the browser."}</li>
+            <li>{"Select a device, then watch the camera preview or microphone level and replay the automatically recorded sample."}</li>
+            <li>{"Choose an output device when available and play the left, stereo, and right test tones."}</li>
+            <li>{"Stop each test individually or use Stop all hardware to release every active device."}</li>
             </ol>
           </div>
         </details>
