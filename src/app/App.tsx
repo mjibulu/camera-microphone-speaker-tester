@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
+import { IntlProvider, type AbstractIntlMessages } from "use-intl";
 import { Tool } from "../tool/Tool";
+import messages from "../tool/messages.json";
 
 type Theme = "light" | "dark";
 
@@ -45,7 +47,12 @@ export function App() {
         </section>
 
         <section className="tool-workspace" aria-label="Tool workspace">
-          <Tool />
+          <IntlProvider
+            locale="en"
+            messages={messages as unknown as AbstractIntlMessages}
+          >
+            <Tool />
+          </IntlProvider>
         </section>
 
         <details className="information-section">
@@ -65,7 +72,7 @@ export function App() {
       <footer className="site-footer">
         <span>Open-source software under the MIT Licence.</span>
         <span>
-          Created by M. Jibulu for{" "}
+          Created by Mujeeb for{" "}
           <a href="https://eburp.com/">eBURP</a>.
         </span>
       </footer>

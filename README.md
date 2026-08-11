@@ -1,44 +1,28 @@
-# Camera, Microphone & Speaker Tester
+# **TITLE**
 
-Test selected cameras, microphones, and speakers with live previews, input levels, sample playback, and stereo tones.
+**DESCRIPTION**
+
+[Features](#features) · [Usage](#usage) · [Run locally](#run-locally) · [Contributing](./.github/CONTRIBUTING.md) · [Licence](./LICENSE)
 
 ## Features
 
-- Separate camera and microphone start controls, so only the hardware being tested is activated
-- Live preview for the selected camera with switching between available video devices
-- Real-time microphone level meter for checking input sensitivity and activity
-- Automatic microphone sample recording with playback, stop, and discard controls
-- Left-channel, right-channel, and stereo speaker test tones
-- Output-device selection where the browser supports speaker routing
-- Persistent on-screen hardware status plus one-click cleanup of every active media track and audio resource
+**FEATURE_LIST**
 
 ## Screenshot
 
-![Camera, Microphone & Speaker Tester interface](./public/tool-preview.webp)
+## Usage
 
-## How to use
+**HOW_TO_LIST**
 
-1. Open the Camera, Microphone, or Speakers panel for the hardware you want to check.
-2. Start the camera or microphone and approve only the permission requested by the browser.
-3. Select a device, then watch the camera preview or microphone level and replay the automatically recorded sample.
-4. Choose an output device when available and play the left, stereo, and right test tones.
-5. Stop each test individually or use Stop all hardware to release every active device.
+## Browser support
 
-## Browser support and limitations
+Works with current versions of Chrome/Chromium, Firefox, and Safari.
 
-The current stable releases of Chromium, Firefox, and Safari are supported.
+**BROWSER_SUPPORT_NOTES**
 
-- Camera and microphone tests require HTTPS or localhost and explicit browser permission.
-- Selecting a specific speaker is not supported by every browser; channel test tones still use the active system output.
-- Another application using a device exclusively may prevent that device from starting.
+## Run locally
 
-## Clone and run locally
-
-Requirements:
-
-- Git
-- Node.js 22.13.x or Node.js 24.x (recommended)
-- Corepack
+You’ll need Git, Corepack, and Node.js 22.13.x or 24.x.
 
 ```bash
 git clone https://github.com/mjibulu/camera-microphone-speaker-tester.git
@@ -48,52 +32,39 @@ pnpm install --frozen-lockfile
 pnpm run dev
 ```
 
-The development server prints the local URL to open in your browser.
+Open the local URL shown in the terminal.
 
-## Verify
-
-Fast checks:
+## Checks
 
 ```bash
 pnpm run check
-```
-
-Complete browser verification:
-
-```bash
 pnpm run verify
 ```
 
-## Build and host
+## Build
 
 ```bash
 pnpm run build
 ```
 
-Upload the contents of `dist/` to a static host. The application supports both
-root and subdirectory hosting and needs no environment variables.
+The production files are created in `dist/` and can be hosted on GitHub Pages, Netlify, Cloudflare Pages, Vercel, or any static host.
 
-The same output can be deployed with GitHub Pages, Netlify, Cloudflare Pages,
-Vercel static hosting, or an ordinary file upload.
+## Privacy
 
-## Data and network behaviour
+The app runs in your browser and does not include analytics, ads, or telemetry.
 
-The application ships without analytics or telemetry. Tool processing occurs
-in the browser, and the primary browser tests fail unexpected external
-requests. See [PRIVACY.md](./PRIVACY.md) for the storage and browser API
-inventory.
+**STORAGE_DESCRIPTION**
+
+**BROWSER_API_DESCRIPTION**
 
 ## Contributing
 
-Issues and pull requests are welcome. Read
-[CONTRIBUTING.md](./CONTRIBUTING.md) before submitting a change.
+Issues and pull requests are welcome. See the [contribution guide](./.github/CONTRIBUTING.md) before submitting changes.
 
 ## Credits
 
-Created by M. Jibulu for [eBURP](https://eburp.com/).
+Created by Mujeeb for [eBURP](https://eburp.com/).
 
 ## Licence
 
-Original code is available under the [MIT Licence](./LICENSE). Dependencies and
-assets retain their own licences; see
-[THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
+Licensed under the [MIT Licence](./LICENSE). Third-party dependencies keep their respective licences.

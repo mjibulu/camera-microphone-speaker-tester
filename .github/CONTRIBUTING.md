@@ -22,13 +22,11 @@ pnpm run dev
 6. Open a pull request and complete its checklist.
 
 Keep changes focused and avoid unrelated formatting rewrites. New dependencies
-must be necessary, compatible with the MIT-licensed project, and added to
-`THIRD_PARTY_NOTICES.md`.
+must be necessary, compatible with the MIT-licensed project, and documented in
+the README's third-party software section.
 
 ## Contribution licence
 
 You retain copyright in work you create. By submitting it, you agree that your
 contribution is provided under this repository's MIT Licence. Only submit work
 you have the right to provide.
-
-No Developer Certificate of Origin sign-off is required initially.

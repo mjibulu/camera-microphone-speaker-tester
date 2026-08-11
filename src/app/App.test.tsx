@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 import { App } from "./App";
@@ -108,13 +108,17 @@ describe("Camera, Microphone & Speaker Tester", () => {
   it("starts and stops camera and microphone tracks", async () => {
     const user = userEvent.setup();
     render(<App />);
+    const camera = screen.getByRole("region", { name: "Camera" });
+    const microphone = screen.getByRole("region", { name: "Microphone" });
 
-    await user.click(screen.getByRole("button", { name: "Start camera" }));
-    expect(await screen.findByText("Hardware active")).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Stop camera" }));
+    await user.click(within(camera).getByRole("button", { name: "Start" }));
+    expect(await screen.findByRole("status")).toHaveTextContent("Active");
+    await user.click(within(camera).getByRole("button", { name: "Stop" }));
     expect(stoppedTracks[0]).toHaveBeenCalled();
 
-    await user.click(screen.getByRole("button", { name: "Start microphone" }));
+    await user.click(
+      within(microphone).getByRole("button", { name: "Start" }),
+    );
     expect(
       await screen.findByRole("button", { name: /Stop recording/u }),
     ).toBeInTheDocument();
@@ -122,7 +126,9 @@ describe("Camera, Microphone & Speaker Tester", () => {
     expect(
       await screen.findByLabelText("Recorded microphone sample playback"),
     ).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Stop microphone" }));
+    await user.click(
+      within(microphone).getByRole("button", { name: "Stop" }),
+    );
     expect(stoppedTracks[1]).toHaveBeenCalled();
   });
 
@@ -131,7 +137,7 @@ describe("Camera, Microphone & Speaker Tester", () => {
     render(<App />);
 
     await waitFor(() =>
-      expect(screen.getByRole("combobox", { name: "Output device" })).toBeEnabled(),
+      expect(screen.getByRole("combobox", { name: "Output" })).toBeEnabled(),
     );
     await user.click(screen.getByRole("button", { name: "Left" }));
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();

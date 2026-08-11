@@ -110,8 +110,8 @@ a {
 
 .site-title {
   color: var(--text);
-  font-size: 1.05rem;
-  font-weight: 700;
+  font-size: 0.9375rem;
+  font-weight: var(--font-weight-semibold);
   text-decoration: none;
 }
 
@@ -145,7 +145,7 @@ main {
   margin: 0 0 8px;
   color: var(--accent);
   font-size: 0.78rem;
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -158,7 +158,7 @@ h1 {
 
 .tool-introduction > p:last-child {
   color: var(--text-muted);
-  font-size: 1.05rem;
+  font-size: 0.9375rem;
   line-height: 1.7;
 }
 
@@ -201,7 +201,7 @@ h1 {
 
 .file-dropzone p:first-child {
   color: var(--color-text);
-  font-weight: 650;
+  font-weight: var(--font-weight-medium);
 }
 
 .fatal-error {
@@ -228,6 +228,14 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.sticky-action-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 15;
+  padding-block: 12px;
+  background: linear-gradient(to top, var(--background) 72%, transparent);
 }
 
 button,
@@ -265,12 +273,12 @@ button:disabled {
 
 .option-field > label,
 .editor-label {
-  font-weight: 650;
+  font-weight: var(--font-weight-medium);
 }
 
 .field-hint {
   color: var(--text-muted);
-  font-size: 0.88rem;
+  font-size: 0.8rem;
 }
 
 input,
@@ -336,7 +344,7 @@ textarea {
 
 .information-section summary {
   padding: 20px 24px;
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
   cursor: pointer;
 }
 
