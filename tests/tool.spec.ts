@@ -100,16 +100,18 @@ test("camera, microphone recording, and speakers stay local", async ({
   page.on("request", (request) => networkGuard.inspect(request.url()));
 
   await page.goto("/");
-  await page.getByRole("button", { name: "Start camera" }).click();
-  await expect(page.getByText("Hardware active")).toBeVisible();
-  await page.getByRole("button", { name: "Stop camera" }).click();
+  const camera = page.getByRole("region", { name: "Camera" });
+  const microphone = page.getByRole("region", { name: "Microphone" });
+  await camera.getByRole("button", { name: "Start" }).click();
+  await expect(page.getByRole("status")).toContainText("Active");
+  await camera.getByRole("button", { name: "Stop" }).click();
 
-  await page.getByRole("button", { name: "Start microphone" }).click();
+  await microphone.getByRole("button", { name: "Start" }).click();
   await page.getByRole("button", { name: /Stop recording/u }).click();
   await expect(
     page.getByLabel("Recorded microphone sample playback"),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Stop microphone" }).click();
+  await microphone.getByRole("button", { name: "Stop" }).click();
 
   await page.getByRole("button", { name: "Left" }).click();
   await expect(page.getByText("Playing")).toBeVisible();

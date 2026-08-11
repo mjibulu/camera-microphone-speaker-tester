@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslations } from "use-intl";
 import { Camera, Circle, Mic, MonitorSpeaker, Octagon, Play, ShieldCheck, Trash2 } from "lucide-react";
+import { classifyMediaDeviceError, type MediaDeviceErrorKey, } from "../lib/public-tools/mediaDeviceErrors";
 type SpeakerChannel = "left" | "right" | "stereo";
 type SinkCapableAudio = HTMLAudioElement & {
     setSinkId?: (deviceId: string) => Promise<void>;
@@ -38,16 +40,9 @@ function createTestTone(channel: SpeakerChannel): Blob {
     }
     return new Blob([buffer], { type: "audio/wav" });
 }
-function permissionMessage(error: unknown, device: "camera" | "microphone"): string {
-    if (error instanceof DOMException && (error.name === "NotAllowedError" || error.name === "SecurityError")) {
-        return `${device === "camera" ? "Camera" : "Microphone"} access was not allowed. Check the permission beside the address bar and try again.`;
-    }
-    if (error instanceof DOMException && error.name === "NotFoundError") {
-        return `No ${device} was found. Connect one and try again.`;
-    }
-    return `The ${device} could not be started. Check that another application is not using it.`;
-}
+type MediaErrorKey = MediaDeviceErrorKey | "cameraUnsupported" | "microphoneUnsupported" | "speakerPlayback" | "recordingUnsupported" | "recordingEmpty" | "recordingFailed";
 export function MediaDeviceTester() {
+    const t = useTranslations("tools.utilities.camera-microphone-speaker-tester.tool");
     const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
     const [microphones, setMicrophones] = useState<MediaDeviceInfo[]>([]);
     const [speakers, setSpeakers] = useState<MediaDeviceInfo[]>([]);
@@ -61,9 +56,9 @@ export function MediaDeviceTester() {
     const [recordingActive, setRecordingActive] = useState(false);
     const [recordingSeconds, setRecordingSeconds] = useState(0);
     const [recordedSampleUrl, setRecordedSampleUrl] = useState("");
-    const [cameraError, setCameraError] = useState("");
-    const [microphoneError, setMicrophoneError] = useState("");
-    const [speakerError, setSpeakerError] = useState("");
+    const [cameraError, setCameraError] = useState<MediaErrorKey | null>(null);
+    const [microphoneError, setMicrophoneError] = useState<MediaErrorKey | null>(null);
+    const [speakerError, setSpeakerError] = useState<MediaErrorKey | null>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const audioRef = useRef<HTMLAudioElement>(null);
     const cameraStreamRef = useRef<MediaStream | null>(null);
@@ -162,9 +157,9 @@ export function MediaDeviceTester() {
         };
     }, [applyDevices, refreshDevices, stopAll]);
     const startCamera = useCallback(async (requestedId = cameraId) => {
-        setCameraError("");
+        setCameraError(null);
         if (!navigator.mediaDevices?.getUserMedia) {
-            setCameraError("Camera testing is not supported by this browser.");
+            setCameraError("cameraUnsupported");
             return;
         }
         stopCamera();
@@ -184,13 +179,13 @@ export function MediaDeviceTester() {
         }
         catch (error) {
             stopCamera();
-            setCameraError(permissionMessage(error, "camera"));
+            setCameraError(classifyMediaDeviceError(error, "camera"));
         }
     }, [cameraId, refreshDevices, stopCamera]);
     async function startMicrophone(requestedId = microphoneId) {
-        setMicrophoneError("");
+        setMicrophoneError(null);
         if (!navigator.mediaDevices?.getUserMedia || !window.AudioContext) {
-            setMicrophoneError("Microphone level testing is not supported by this browser.");
+            setMicrophoneError("microphoneUnsupported");
             return;
         }
         stopMicrophone();
@@ -225,11 +220,11 @@ export function MediaDeviceTester() {
         }
         catch (error) {
             stopMicrophone();
-            setMicrophoneError(permissionMessage(error, "microphone"));
+            setMicrophoneError(classifyMediaDeviceError(error, "microphone"));
         }
     }
     async function playSpeakerTest(channel: SpeakerChannel) {
-        setSpeakerError("");
+        setSpeakerError(null);
         stopSpeaker();
         try {
             const audio = audioRef.current as SinkCapableAudio | null;
@@ -246,7 +241,7 @@ export function MediaDeviceTester() {
         }
         catch {
             stopSpeaker();
-            setSpeakerError("The test sound could not be played. Check the browser and system output settings.");
+            setSpeakerError("speakerPlayback");
         }
     }
     function discardRecording() {
@@ -262,7 +257,7 @@ export function MediaDeviceTester() {
         if (!stream)
             return;
         if (typeof MediaRecorder === "undefined") {
-            setMicrophoneError("Audio recording is not supported by this browser.");
+            setMicrophoneError("recordingUnsupported");
             return;
         }
         discardRecording();
@@ -287,7 +282,7 @@ export function MediaDeviceTester() {
                 || generation !== recordingGenerationRef.current)
                 return;
             if (!blob.size) {
-                setMicrophoneError("No audio was captured. Try recording the sample again.");
+                setMicrophoneError("recordingEmpty");
                 return;
             }
             const url = URL.createObjectURL(blob);
@@ -298,7 +293,7 @@ export function MediaDeviceTester() {
             if (generation !== recordingGenerationRef.current)
                 return;
             setRecordingActive(false);
-            setMicrophoneError("The microphone sample could not be recorded.");
+            setMicrophoneError("recordingFailed");
         };
         recorder.start(200);
         mediaRecorderRef.current = recorder;
@@ -316,92 +311,92 @@ export function MediaDeviceTester() {
     return (<div className="media-tester">
       <div className={`hardware-status ${anyHardwareActive ? "active" : ""}`}>
         <ShieldCheck size={18} aria-hidden="true"/>
-        <strong role="status" aria-live="polite">{anyHardwareActive ? "Hardware active" : "No camera or microphone active"}</strong>
-        {cameraActive ? <span><Camera size={14} aria-hidden="true"/> Camera</span> : null}
-        {microphoneActive ? <span><Mic size={14} aria-hidden="true"/> Microphone</span> : null}
-        {recordingActive ? <span className="recording-indicator"><Circle size={12} fill="currentColor" aria-hidden="true"/> Recording</span> : null}
-        {anyHardwareActive ? (<button type="button" className="danger-button" onClick={stopAll}><Octagon size={15} aria-hidden="true"/> Stop all hardware</button>) : null}
+        <strong role="status" aria-live="polite">{anyHardwareActive ? t("status.active") : t("status.inactive")}</strong>
+        {cameraActive ? <span><Camera size={14} aria-hidden="true"/> {t("status.camera")}</span> : null}
+        {microphoneActive ? <span><Mic size={14} aria-hidden="true"/> {t("status.microphone")}</span> : null}
+        {recordingActive ? <span className="recording-indicator"><Circle size={12} fill="currentColor" aria-hidden="true"/> {t("status.recording")}</span> : null}
+        {anyHardwareActive ? (<button type="button" className="danger-button" onClick={stopAll}><Octagon size={15} aria-hidden="true"/> {t("status.stopAll")}</button>) : null}
       </div>
 
       <div className="media-test-grid">
         <section className={`device-test-card ${cameraActive ? "is-active" : ""}`} aria-labelledby="camera-test-heading">
           <div className="device-test-heading">
             <div className="device-icon"><Camera size={22} aria-hidden="true"/></div>
-            <div><h2 id="camera-test-heading">Camera</h2><p>Preview one selected camera.</p></div>
-            <span className="device-state">{cameraActive ? "Active" : "Off"}</span>
+            <div><h2 id="camera-test-heading">{t("camera.heading")}</h2><p>{t("camera.description")}</p></div>
+            <span className="device-state">{cameraActive ? t("status.deviceActive") : t("status.deviceOff")}</span>
           </div>
           <div className="camera-preview">
-            <video ref={videoRef} muted playsInline aria-label="Selected camera preview"/>
-            {!cameraActive ? <div><Camera size={30} aria-hidden="true"/><span>Camera preview is off</span></div> : null}
+            <video ref={videoRef} muted playsInline aria-label={t("camera.previewAria")}/>
+            {!cameraActive ? <div><Camera size={30} aria-hidden="true"/><span>{t("camera.previewOff")}</span></div> : null}
           </div>
-          <label className="device-select"><span>Camera device</span><select value={cameraId} onChange={(event) => {
+          <label className="device-select"><span>{t("camera.device")}</span><select value={cameraId} onChange={(event) => {
             setCameraId(event.target.value);
             if (cameraActive)
                 void startCamera(event.target.value);
         }} disabled={!cameras.length}>
-            {!cameras.length ? <option value="">Camera labels appear after permission</option> : null}
-            {cameras.map((device, index) => <option key={device.deviceId || index} value={device.deviceId}>{device.label || `Camera ${index + 1}`}</option>)}
+            {!cameras.length ? <option value="">{t("camera.labelsAfterPermission")}</option> : null}
+            {cameras.map((device, index) => <option key={device.deviceId || index} value={device.deviceId}>{device.label || t("camera.fallbackName", { number: index + 1 })}</option>)}
           </select></label>
-          {cameraError ? <p className="device-error" role="alert">{cameraError}</p> : null}
+          {cameraError ? <p className="device-error" role="alert">{t(`errors.${cameraError}`)}</p> : null}
           <div className="device-actions">
-            {!cameraActive ? <button type="button" className="primary-button" onClick={() => void startCamera()}><Play size={15} aria-hidden="true"/> Start camera</button> : <button type="button" className="secondary-button" onClick={stopCamera}><Octagon size={15} aria-hidden="true"/> Stop camera</button>}
+            {!cameraActive ? <button type="button" className="primary-button" onClick={() => void startCamera()}><Play size={15} aria-hidden="true"/> {t("camera.start")}</button> : <button type="button" className="secondary-button" onClick={stopCamera}><Octagon size={15} aria-hidden="true"/> {t("camera.stop")}</button>}
           </div>
         </section>
 
         <section className={`device-test-card ${microphoneActive ? "is-active" : ""}`} aria-labelledby="microphone-test-heading">
           <div className="device-test-heading">
             <div className="device-icon"><Mic size={22} aria-hidden="true"/></div>
-            <div><h2 id="microphone-test-heading">Microphone</h2><p>Watch the live input level.</p></div>
-            <span className="device-state">{microphoneActive ? "Active" : "Off"}</span>
+            <div><h2 id="microphone-test-heading">{t("microphone.heading")}</h2><p>{t("microphone.description")}</p></div>
+            <span className="device-state">{microphoneActive ? t("status.deviceActive") : t("status.deviceOff")}</span>
           </div>
-          <div className="microphone-meter" aria-label={`Microphone level ${Math.round(microphoneLevel)} percent`}>
+          <div className="microphone-meter" role="meter" aria-label={t("microphone.levelAria", { level: Math.round(microphoneLevel) })} aria-valuenow={Math.round(microphoneLevel)} aria-valuemin={0} aria-valuemax={100}>
             <div style={{ width: `${microphoneLevel}%` }}/>
-            <span>{microphoneActive ? `${Math.round(microphoneLevel)}%` : "Start speaking after permission"}</span>
+            <span>{microphoneActive ? t("microphone.level", { level: Math.round(microphoneLevel) }) : t("microphone.speakAfterPermission")}</span>
           </div>
-          <label className="device-select"><span>Microphone device</span><select value={microphoneId} onChange={(event) => {
+          <label className="device-select"><span>{t("microphone.device")}</span><select value={microphoneId} onChange={(event) => {
             setMicrophoneId(event.target.value);
             if (microphoneActive)
                 void startMicrophone(event.target.value);
         }} disabled={!microphones.length}>
-            {!microphones.length ? <option value="">Microphone labels appear after permission</option> : null}
-            {microphones.map((device, index) => <option key={device.deviceId || index} value={device.deviceId}>{device.label || `Microphone ${index + 1}`}</option>)}
+            {!microphones.length ? <option value="">{t("microphone.labelsAfterPermission")}</option> : null}
+            {microphones.map((device, index) => <option key={device.deviceId || index} value={device.deviceId}>{device.label || t("microphone.fallbackName", { number: index + 1 })}</option>)}
           </select></label>
-          {microphoneError ? <p className="device-error" role="alert">{microphoneError}</p> : null}
+          {microphoneError ? <p className="device-error" role="alert">{t(`errors.${microphoneError}`)}</p> : null}
           <div className="device-actions">
-            {!microphoneActive ? <button type="button" className="primary-button" onClick={() => void startMicrophone()}><Play size={15} aria-hidden="true"/> Start microphone</button> : <button type="button" className="secondary-button" onClick={stopMicrophone}><Octagon size={15} aria-hidden="true"/> Stop microphone</button>}
+            {!microphoneActive ? <button type="button" className="primary-button" onClick={() => void startMicrophone()}><Play size={15} aria-hidden="true"/> {t("microphone.start")}</button> : <button type="button" className="secondary-button" onClick={stopMicrophone}><Octagon size={15} aria-hidden="true"/> {t("microphone.stop")}</button>}
           </div>
           <div className="microphone-recording">
             <div>
-              <strong>Automatic recording and playback</strong>
-              <span>Starting the microphone records up to 30 seconds so you can check clarity and volume.</span>
+              <strong>{t("microphone.recordingHeading")}</strong>
+              <span>{t("microphone.recordingDescription")}</span>
             </div>
             <div className="recording-actions">
               {recordingActive ? (<button type="button" className="danger-button" onClick={stopRecording}>
-                  <Octagon size={14} aria-hidden="true"/> Stop recording ({recordingSeconds}s)
+                  <Octagon size={14} aria-hidden="true"/> {t("microphone.stopRecording", { seconds: recordingSeconds })}
                 </button>) : null}
-              {recordedSampleUrl ? <button type="button" className="text-button danger" onClick={discardRecording}><Trash2 size={14} aria-hidden="true"/> Discard</button> : null}
+              {recordedSampleUrl ? <button type="button" className="text-button danger" onClick={discardRecording}><Trash2 size={14} aria-hidden="true"/> {t("microphone.discard")}</button> : null}
             </div>
-            {recordedSampleUrl ? (<audio className="microphone-playback" src={recordedSampleUrl} controls aria-label="Recorded microphone sample playback"/>) : (<div className="recording-empty">{recordingActive ? "Speak normally, then stop the recording to listen." : "The recording starts with the microphone."}</div>)}
+            {recordedSampleUrl ? (<audio className="microphone-playback" src={recordedSampleUrl} controls aria-label={t("microphone.playbackAria")}/>) : (<div className="recording-empty">{recordingActive ? t("microphone.recordingActive") : t("microphone.recordingIdle")}</div>)}
           </div>
         </section>
 
         <section className="device-test-card speaker-card" aria-labelledby="speaker-test-heading">
           <div className="device-test-heading">
             <div className="device-icon"><MonitorSpeaker size={22} aria-hidden="true"/></div>
-            <div><h2 id="speaker-test-heading">Speakers</h2><p>Check left, right, and stereo channels.</p></div>
-            <span className="device-state">{speakerActive ? "Playing" : "Ready"}</span>
+            <div><h2 id="speaker-test-heading">{t("speaker.heading")}</h2><p>{t("speaker.description")}</p></div>
+            <span className="device-state">{speakerActive ? t("status.playing") : t("status.ready")}</span>
           </div>
-          <label className="device-select"><span>Output device</span><select value={speakerId} onChange={(event) => setSpeakerId(event.target.value)} disabled={!speakers.length}>
-            {!speakers.length ? <option value="">Current system output</option> : null}
-            {speakers.map((device, index) => <option key={device.deviceId || index} value={device.deviceId}>{device.label || `Speaker ${index + 1}`}</option>)}
+          <label className="device-select"><span>{t("speaker.device")}</span><select value={speakerId} onChange={(event) => setSpeakerId(event.target.value)} disabled={!speakers.length}>
+            {!speakers.length ? <option value="">{t("speaker.currentOutput")}</option> : null}
+            {speakers.map((device, index) => <option key={device.deviceId || index} value={device.deviceId}>{device.label || t("speaker.fallbackName", { number: index + 1 })}</option>)}
           </select></label>
           <div className="speaker-buttons">
             {(["left", "stereo", "right"] as const).map((channel) => (<button key={channel} type="button" className={speakerActive === channel ? "primary-button" : "secondary-button"} onClick={() => void playSpeakerTest(channel)}>
-                <MonitorSpeaker size={15} aria-hidden="true"/> {channel[0].toUpperCase() + channel.slice(1)}
+                <MonitorSpeaker size={15} aria-hidden="true"/> {t(`speaker.channels.${channel}`)}
               </button>))}
           </div>
-          {speakerError ? <p className="device-error" role="alert">{speakerError}</p> : null}
-          <audio ref={audioRef} aria-label="Speaker test audio"/>
+          {speakerError ? <p className="device-error" role="alert">{t(`errors.${speakerError}`)}</p> : null}
+          <audio ref={audioRef} aria-label={t("speaker.audioAria")}/>
         </section>
       </div>
     </div>);

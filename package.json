@@ -6,7 +6,7 @@
   "private": false,
   "license": "MIT",
   "author": {
-    "name": "M. Jibulu",
+    "name": "Mujeeb",
     "url": "https://eburp.com/"
   },
   "packageManager": "pnpm@11.9.0",
@@ -30,7 +30,8 @@
   "dependencies": {
     "lucide-react": "^1.27.0",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "use-intl": "4.13.5"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",

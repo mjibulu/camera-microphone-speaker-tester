@@ -1,0 +1,79 @@
+{
+  "tools": {
+    "utilities": {
+      "camera-microphone-speaker-tester": {
+        "tool": {
+          "errors": {
+            "cameraDenied": "Camera access was not allowed.",
+            "microphoneDenied": "Microphone access was not allowed.",
+            "cameraMissing": "No camera found.",
+            "microphoneMissing": "No microphone found.",
+            "cameraStart": "Could not start the camera.",
+            "microphoneStart": "Could not start the microphone.",
+            "cameraUnsupported": "Camera testing unavailable.",
+            "microphoneUnsupported": "Microphone testing unavailable.",
+            "speakerPlayback": "Could not play the test sound.",
+            "recordingUnsupported": "Audio recording unavailable.",
+            "recordingEmpty": "No audio captured.",
+            "recordingFailed": "Could not record the sample."
+          },
+          "status": {
+            "active": "Active",
+            "inactive": "Inactive",
+            "camera": "Camera",
+            "microphone": "Microphone",
+            "recording": "Recording",
+            "stopAll": "Stop all",
+            "deviceActive": "Active",
+            "deviceOff": "Off",
+            "playing": "Playing",
+            "ready": "Ready"
+          },
+          "camera": {
+            "heading": "Camera",
+            "description": "",
+            "previewAria": "Selected camera preview",
+            "previewOff": "Camera off",
+            "device": "Device",
+            "labelsAfterPermission": "",
+            "fallbackName": "Camera {number}",
+            "start": "Start",
+            "stop": "Stop"
+          },
+          "microphone": {
+            "heading": "Microphone",
+            "description": "",
+            "levelAria": "Microphone level {level} percent",
+            "level": "{level}%",
+            "speakAfterPermission": "",
+            "device": "Device",
+            "labelsAfterPermission": "",
+            "fallbackName": "Microphone {number}",
+            "start": "Start",
+            "stop": "Stop",
+            "recordingHeading": "Recording",
+            "recordingDescription": "",
+            "stopRecording": "Stop recording ({seconds}s)",
+            "discard": "Discard",
+            "playbackAria": "Recorded microphone sample playback",
+            "recordingActive": "Recording…",
+            "recordingIdle": ""
+          },
+          "speaker": {
+            "heading": "Speakers",
+            "description": "",
+            "device": "Output",
+            "currentOutput": "System output",
+            "fallbackName": "Speaker {number}",
+            "channels": {
+              "left": "Left",
+              "stereo": "Stereo",
+              "right": "Right"
+            },
+            "audioAria": "Speaker test audio"
+          }
+        }
+      }
+    }
+  }
+}
